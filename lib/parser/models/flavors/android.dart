@@ -45,11 +45,15 @@ class Android extends OS {
   @JsonKey(disallowNullValue: true)
   final AGConnect? agconnect;
 
+  @JsonKey(disallowNullValue: true)
+  final String? mergeManifest;
+
   Android({
     required this.applicationId,
     this.customConfig = const {},
     this.resValues = const {},
     this.agconnect,
+    this.mergeManifest,
     bool generateDummyAssets = true,
     Firebase? firebase,
     String? icon,
@@ -57,7 +61,7 @@ class Android extends OS {
           generateDummyAssets: generateDummyAssets,
           firebase: firebase,
           icon: icon,
-        );
+      );
 
   factory Android.fromJson(Map<String, dynamic> json) =>
       _$AndroidFromJson(json);

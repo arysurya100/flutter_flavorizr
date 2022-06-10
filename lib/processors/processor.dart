@@ -30,6 +30,7 @@ import 'package:flutter_flavorizr/processors/android/android_build_gradle_proces
 import 'package:flutter_flavorizr/processors/android/android_dummy_assets_processor.dart';
 import 'package:flutter_flavorizr/processors/android/android_manifest_processor.dart';
 import 'package:flutter_flavorizr/processors/android/icons/android_icons_processor.dart';
+import 'package:flutter_flavorizr/processors/android/merge_manifest/merge_manifest_processor.dart';
 import 'package:flutter_flavorizr/processors/commons/abstract_processor.dart';
 import 'package:flutter_flavorizr/processors/commons/copy_file_processor.dart';
 import 'package:flutter_flavorizr/processors/commons/copy_folder_processor.dart';
@@ -67,6 +68,8 @@ class Processor extends AbstractProcessor<void> {
     'android:buildGradle',
     'android:dummyAssets',
     'android:icons',
+    // Android Merge Manifest
+    'android:mergeManifest'
 
     // Flutter
     'flutter:flavors',
@@ -93,7 +96,7 @@ class Processor extends AbstractProcessor<void> {
     'assets:clean',
 
     // IDE
-    'ide:config'
+    'ide:config'    
   ];
 
   Processor(this._pubspec)
@@ -253,6 +256,12 @@ class Processor extends AbstractProcessor<void> {
 
       // IDE
       'ide:config': IDEProcessor(
+        config: pubspec.flavorizr,
+      ),
+
+      // Android Merge Manifest
+      'android:mergeManifest': MergeManifestProcessor(
+        androidDestination: K.androidSrcPath,
         config: pubspec.flavorizr,
       ),
     };
