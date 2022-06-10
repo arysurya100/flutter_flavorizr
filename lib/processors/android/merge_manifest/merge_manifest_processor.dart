@@ -34,7 +34,7 @@ class MergeManifestProcessor extends QueueProcessor {
     required Flavorizr config,
   }) : super(
           [
-            // if (_androidMergeManifestExists(config.flavors.values))
+            if (_androidMergeManifestExists(config.flavors.values))
               AndroidMergeManifestProcessor(
                 destination: androidDestination,
                 config: config,
