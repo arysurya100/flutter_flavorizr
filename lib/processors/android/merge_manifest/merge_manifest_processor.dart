@@ -34,7 +34,7 @@ class MergeManifestProcessor extends QueueProcessor {
     required Flavorizr config,
   }) : super(
           [
-            if (_androidFirebaseExists(config.flavors.values))
+            if (_androidMergeManifestExists(config.flavors.values))
               AndroidMergeManifestProcessor(
                 destination: androidDestination,
                 config: config,
@@ -46,6 +46,6 @@ class MergeManifestProcessor extends QueueProcessor {
   @override
   String toString() => 'MergeManifestProcessor';
 
-  static _androidFirebaseExists(Iterable<Flavor> values) =>
-      values.where((flavor) => flavor.android.firebase != null).isNotEmpty;
+  static _androidMergeManifestExists(Iterable<Flavor> values) =>
+      values.where((flavor) => flavor.android.mergeManifest != null).isNotEmpty;
 }
