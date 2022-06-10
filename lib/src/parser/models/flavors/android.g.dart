@@ -16,7 +16,8 @@ Android _$AndroidFromJson(Map json) {
       'applicationId',
       'customConfig',
       'resValues',
-      'agconnect'
+      'agconnect',
+      'mergeManifest'
     ],
   );
   return Android(
@@ -39,5 +40,6 @@ Android _$AndroidFromJson(Map json) {
         ? null
         : Firebase.fromJson(Map<String, dynamic>.from(json['firebase'] as Map)),
     icon: json['icon'] as String?,
+    mergeManifest: json['mergeManifest'] as String?,
   );
 }
