@@ -69,7 +69,7 @@ class Processor extends AbstractProcessor<void> {
     'android:dummyAssets',
     'android:icons',
     // Android Merge Manifest
-    'android:mergeManifest'
+    'android:mergeManifest',
 
     // Flutter
     'flutter:flavors',
