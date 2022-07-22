@@ -8,3 +8,6 @@
 build/
 .fvm/
 example/.fvm
+test_resources/ios/Flutter/flutter_export_environment.sh
+test_resources/android/local.properties
+test_resources/ios/Flutter/Generated.xcconfig
