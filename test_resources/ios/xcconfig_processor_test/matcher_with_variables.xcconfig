@@ -2,4 +2,5 @@
 
 ASSET_PREFIX=apple
 BUNDLE_NAME=Apple App
+BUNDLE_DISPLAY_NAME=Apple App
 VARIABLE_ONE=variable1
