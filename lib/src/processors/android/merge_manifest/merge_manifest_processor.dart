@@ -23,10 +23,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/parser/models/flavorizr.dart';
-import 'package:flutter_flavorizr/parser/models/flavors/flavor.dart';
-import 'package:flutter_flavorizr/processors/android/merge_manifest/android_merge_manifest_processor.dart';
-import 'package:flutter_flavorizr/processors/commons/queue_processor.dart';
+import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
+import 'package:flutter_flavorizr/src/parser/models/flavors/flavor.dart';
+import 'package:flutter_flavorizr/src/processors/android/merge_manifest/android_merge_manifest_processor.dart';
+import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 
 class MergeManifestProcessor extends QueueProcessor {
   MergeManifestProcessor({
@@ -46,6 +46,7 @@ class MergeManifestProcessor extends QueueProcessor {
   @override
   String toString() => 'MergeManifestProcessor';
 
-  static _androidMergeManifestExists(Iterable<Flavor> values) =>
-      values.where((flavor) => flavor.android.mergeManifest != null).isNotEmpty;
+  static _androidMergeManifestExists(Iterable<Flavor> values) => values
+      .where((flavor) => flavor.android?.mergeManifest != null)
+      .isNotEmpty;
 }

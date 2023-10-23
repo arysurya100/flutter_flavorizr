@@ -23,10 +23,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/parser/models/flavorizr.dart';
-import 'package:flutter_flavorizr/processors/commons/copy_file_processor.dart';
-import 'package:flutter_flavorizr/processors/commons/new_folder_processor.dart';
-import 'package:flutter_flavorizr/processors/commons/queue_processor.dart';
+import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
+import 'package:flutter_flavorizr/src/processors/commons/copy_file_processor.dart';
+import 'package:flutter_flavorizr/src/processors/commons/new_folder_processor.dart';
+import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 
 class AndroidTargetMergeManifestProcessor extends QueueProcessor {
   AndroidTargetMergeManifestProcessor(

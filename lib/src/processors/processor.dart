@@ -30,6 +30,7 @@ import 'package:flutter_flavorizr/src/processors/android/android_build_gradle_pr
 import 'package:flutter_flavorizr/src/processors/android/android_dummy_assets_processor.dart';
 import 'package:flutter_flavorizr/src/processors/android/android_manifest_processor.dart';
 import 'package:flutter_flavorizr/src/processors/android/icons/android_icons_processor.dart';
+import 'package:flutter_flavorizr/src/processors/android/merge_manifest/merge_manifest_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/copy_file_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/copy_folder_processor.dart';
@@ -325,6 +326,11 @@ class Processor extends AbstractProcessor<void> {
 
       // IDE
       'ide:config': () => IDEProcessor(
+            config: flavorizr,
+          ),
+      // Android Merge Manifest
+      'android:mergeManifest': () => MergeManifestProcessor(
+            androidDestination: K.androidSrcPath,
             config: flavorizr,
           ),
     };

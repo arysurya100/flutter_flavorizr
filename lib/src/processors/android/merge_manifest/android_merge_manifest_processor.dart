@@ -23,10 +23,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/extensions/extensions_map.dart';
-import 'package:flutter_flavorizr/parser/models/flavorizr.dart';
-import 'package:flutter_flavorizr/processors/android/merge_manifest/android_target_merge_manifest_processor.dart';
-import 'package:flutter_flavorizr/processors/commons/queue_processor.dart';
+import 'package:flutter_flavorizr/src/extensions/extensions_map.dart';
+import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
+import 'package:flutter_flavorizr/src/processors/android/merge_manifest/android_target_merge_manifest_processor.dart';
+import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 
 class AndroidMergeManifestProcessor extends QueueProcessor {
   AndroidMergeManifestProcessor({
@@ -34,12 +34,13 @@ class AndroidMergeManifestProcessor extends QueueProcessor {
     required Flavorizr config,
   }) : super(
           config.flavors
-              .where((flavorName, flavor) => flavor.android.mergeManifest != null)
+              .where(
+                  (flavorName, flavor) => flavor.android?.mergeManifest != null)
               .map(
                 (flavorName, flavor) => MapEntry(
                   flavorName,
                   AndroidTargetMergeManifestProcessor(
-                    flavor.android.mergeManifest!,
+                    flavor.android?.mergeManifest ?? '',
                     destination,
                     flavorName,
                     config: config,
