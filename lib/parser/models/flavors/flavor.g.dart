@@ -9,7 +9,7 @@ part of 'flavor.dart';
 Flavor _$FlavorFromJson(Map json) {
   $checkKeys(
     json,
-    requiredKeys: const ['app', 'android', 'ios'],
+    requiredKeys: const ['app'],
     disallowNullValues: const ['app', 'android', 'ios'],
   );
   return Flavor(

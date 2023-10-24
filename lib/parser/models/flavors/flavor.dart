@@ -36,10 +36,10 @@ class Flavor {
   @JsonKey(required: true, disallowNullValue: true)
   final App app;
 
-  @JsonKey(required: true, disallowNullValue: true)
+  @JsonKey(required: false, disallowNullValue: true)
   final Android android;
 
-  @JsonKey(required: true, disallowNullValue: true)
+  @JsonKey(required: false, disallowNullValue: true)
   final IOS ios;
 
   Flavor({
