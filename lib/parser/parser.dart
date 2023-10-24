@@ -31,13 +31,13 @@ import 'package:flutter_flavorizr/parser/models/pubspec.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class Parser {
-  final String pubspecPath;
+  final String file;
   final String flavorizrPath;
 
-  Parser({required this.pubspecPath, required this.flavorizrPath});
+  Parser({required this.file, this.flavorizrPath = ''});
 
   Pubspec parse() {
-    File pubspecFile = File(pubspecPath);
+    File pubspecFile = File(file);
     File flavorizrFile = File(flavorizrPath);
 
     final pubspecFileExists = pubspecFile.existsSync();
@@ -47,7 +47,7 @@ class Parser {
       if (!flavorizrFileExists) {
         throw FileNotFoundException(flavorizrPath);
       } else {
-        throw FileNotFoundException(pubspecPath);
+        throw FileNotFoundException(file);
       }
     }
 
