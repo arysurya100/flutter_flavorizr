@@ -50,15 +50,17 @@ class Parser {
         throw FileNotFoundException(file);
       }
     }
-
+    stderr.writeln("AMan");
+    stderr.writeln(flavorizrFileExists.toString());
     try {
-      // if (flavorizrFileExists) {
-      final yaml = flavorizrFile.readAsStringSync();
-      return Pubspec.parse(yaml);
-      // } else {
-      //   final yaml = pubspecFile.readAsStringSync();
-      //   return Pubspec.parse(yaml);
-      // }
+      if (flavorizrFileExists) {
+        final yaml = flavorizrFile.readAsStringSync();
+        stderr.writeln(yaml);
+        return Pubspec.parse(yaml);
+      } else {
+        final yaml = pubspecFile.readAsStringSync();
+        return Pubspec.parse(yaml);
+      }
     } on DisallowedNullValueException catch (e) {
       throw MissingRequiredFieldsException(e.keysWithNullValues);
     } on MissingRequiredKeysException catch (e) {
