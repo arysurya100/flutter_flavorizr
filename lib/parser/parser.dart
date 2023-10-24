@@ -32,35 +32,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 class Parser {
   final String file;
-  final String flavorizrPath;
 
-  Parser({required this.file, this.flavorizrPath = ''});
+  Parser({required this.file});
 
   Pubspec parse() {
     File pubspecFile = File(file);
-    File flavorizrFile = File(flavorizrPath);
-
-    final pubspecFileExists = pubspecFile.existsSync();
-    final flavorizrFileExists = flavorizrFile.existsSync();
-
-    if (!pubspecFileExists) {
-      if (!flavorizrFileExists) {
-        throw FileNotFoundException(flavorizrPath);
-      } else {
-        throw FileNotFoundException(file);
-      }
+    if (!pubspecFile.existsSync()) {
+      throw FileNotFoundException(file);
     }
-    stderr.writeln("AMan");
-    stderr.writeln(flavorizrFileExists.toString());
+
+    String yaml = pubspecFile.readAsStringSync();
+
     try {
-      if (flavorizrFileExists) {
-        final yaml = flavorizrFile.readAsStringSync();
-        stderr.writeln(yaml);
-        return Pubspec.parse(yaml);
-      } else {
-        final yaml = pubspecFile.readAsStringSync();
-        return Pubspec.parse(yaml);
-      }
+      return Pubspec.parse(yaml);
     } on DisallowedNullValueException catch (e) {
       throw MissingRequiredFieldsException(e.keysWithNullValues);
     } on MissingRequiredKeysException catch (e) {
