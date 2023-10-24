@@ -33,6 +33,7 @@ class AndroidIconsProcessor extends QueueProcessor {
     required Flavorizr config,
   }) : super(
           config.flavors
+              .where((key, value) => value.buildAndroid)
               .where((_, flavor) =>
                   flavor.app.icon != null || flavor.android.icon != null)
               .map(

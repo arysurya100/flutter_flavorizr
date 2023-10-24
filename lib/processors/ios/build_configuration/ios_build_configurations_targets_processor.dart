@@ -23,6 +23,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:flutter_flavorizr/extensions/extensions_map.dart';
 import 'package:flutter_flavorizr/parser/mixins/build_settings_mixin.dart';
 import 'package:flutter_flavorizr/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/parser/models/flavors/flavor.dart';
@@ -38,6 +39,7 @@ class IOSBuildConfigurationsTargetsProcessor extends QueueProcessor {
     required Flavorizr config,
   }) : super(
           config.flavors
+              .where((key, value) => value.buildIos)
               .map((String flavorName, Flavor flavor) => MapEntry(
                     flavorName,
                     IOSBuildConfigurationsProcessor(

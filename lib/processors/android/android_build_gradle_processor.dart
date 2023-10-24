@@ -27,6 +27,7 @@ import 'dart:collection';
 
 import 'package:flutter_flavorizr/exception/existing_flavor_dimensions_exception.dart';
 import 'package:flutter_flavorizr/exception/malformed_resource_exception.dart';
+import 'package:flutter_flavorizr/extensions/extensions_map.dart';
 import 'package:flutter_flavorizr/parser/models/config/android.dart';
 import 'package:flutter_flavorizr/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/parser/models/flavors/android/res_value.dart';
@@ -122,7 +123,9 @@ class AndroidBuildGradleProcessor extends StringProcessor {
 
     buffer.writeln('    productFlavors {');
 
-    config.flavors.forEach((name, flavor) {
+    config.flavors
+        .where((key, value) => value.buildAndroid)
+        .forEach((name, flavor) {
       buffer.writeln('        $name {');
       buffer.writeln('            dimension "$flavorDimension"');
       buffer.writeln(

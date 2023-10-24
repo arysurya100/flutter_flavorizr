@@ -47,5 +47,8 @@ class MergeManifestProcessor extends QueueProcessor {
   String toString() => 'MergeManifestProcessor';
 
   static _androidMergeManifestExists(Iterable<Flavor> values) =>
-      values.where((flavor) => flavor.android.mergeManifest != null).isNotEmpty;
+      values
+          .where((flavor) => flavor.android.mergeManifest != null)
+          .isNotEmpty &&
+      values.where((flavor) => flavor.buildAndroid).isNotEmpty;
 }
