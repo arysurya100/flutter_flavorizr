@@ -45,7 +45,9 @@ class IOSTargetsFirebaseProcessor extends QueueProcessor {
     required Flavorizr config,
   }) : super(
           [
-            ..._filteredFlavors(config)
+            ...config.flavors
+                .where((flavorName, flavor) =>
+                    flavor.ios.firebase != null && flavor.buildIos == true)
                 .map(
                   (flavorName, flavor) => MapEntry(
                     flavorName,
@@ -92,8 +94,4 @@ class IOSTargetsFirebaseProcessor extends QueueProcessor {
 
   @override
   String toString() => 'IOSTargetsFirebaseProcessor';
-
-  static Map<String, Flavor> _filteredFlavors(Flavorizr config) =>
-      config.flavors
-          .where((flavorName, flavor) => flavor.android.firebase != null);
 }
