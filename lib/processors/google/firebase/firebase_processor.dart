@@ -65,9 +65,9 @@ class FirebaseProcessor extends QueueProcessor {
 
   static _androidFirebaseExists(Iterable<Flavor> values) =>
       values.where((flavor) => flavor.android.firebase != null).isNotEmpty &&
-      values.where((flavor) => flavor.buildAndroid).isNotEmpty;
+      values.where((flavor) => flavor.buildAndroid == true).isNotEmpty;
 
   static _iosFirebaseExists(Iterable<Flavor> values) =>
       values.where((flavor) => flavor.ios.firebase != null).isNotEmpty &&
-      values.where((flavor) => flavor.buildIos).isNotEmpty;
+      values.where((flavor) => flavor.buildIos == true).isNotEmpty;
 }
