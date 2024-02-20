@@ -34,7 +34,7 @@ class DarwinSchemasProcessor extends QueueProcessor {
     String path, {
     required Flavorizr config,
   }) : super(
-          config.flavors.keys.map(
+          config.iosFlavors.keys.map(
             (String flavorName) => ShellProcessor(
               process,
               [
