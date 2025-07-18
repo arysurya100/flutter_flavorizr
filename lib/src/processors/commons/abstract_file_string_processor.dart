@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
+ * files (the 'Software'), to deal in the Software without
  * restriction, including without limitation the rights to use,
  * copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the
@@ -13,7 +13,7 @@
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_file_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 
@@ -31,10 +30,11 @@ abstract class AbstractFileStringProcessor extends AbstractFileProcessor {
   StringProcessor processor;
 
   AbstractFileStringProcessor(
-    String path,
+    super.path,
     this.processor, {
-    required Flavorizr config,
-  }) : super(path, config: config);
+    required super.config,
+    required super.logger,
+  });
 
   @override
   void execute() {
@@ -44,5 +44,5 @@ abstract class AbstractFileStringProcessor extends AbstractFileProcessor {
 
   @override
   String toString() =>
-      "FileProcessor: writing file $path with nested $processor";
+      'AbstractFileStringProcessor: { path: $path, processor: $processor }';
 }

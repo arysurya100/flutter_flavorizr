@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,39 +25,59 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter_flavorizr/src/exception/malformed_resource_exception.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 import 'package:xml/xml.dart';
 
 class AndroidManifestProcessor extends StringProcessor {
   AndroidManifestProcessor({
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
     XmlDocument document = XmlDocument.parse(input!);
 
+    logger.detail('[$AndroidManifestProcessor] Processing AndroidManifest.xml');
+
     Iterable<XmlElement> applications = document.findAllElements('application');
     if (applications.isEmpty) {
+      logger.detail(
+        '[$AndroidManifestProcessor] No application tag found in AndroidManifest.xml',
+        style: logger.theme.err,
+      );
+
       throw MalformedResourceException(input!);
     }
 
-    XmlNode application = applications.first;
-    XmlAttribute? androidLabel = application.attributes.firstWhereOrNull(
-      (XmlAttribute attribute) =>
-          attribute.name.toXmlString() == 'android:label',
+    logger.detail(
+      '[$AndroidManifestProcessor] Found application tag in AndroidManifest.xml',
+    );
+
+    final application = applications.first;
+    final androidLabel = application.attributes.firstWhereOrNull(
+      (attribute) => attribute.name.toXmlString() == 'android:label',
     );
 
     if (androidLabel == null) {
+      logger.detail(
+        '[$AndroidManifestProcessor] No android:label attribute found in application tag',
+        style: logger.theme.err,
+      );
+
       throw MalformedResourceException(input!);
     }
 
+    logger.detail(
+      '[$AndroidManifestProcessor] Found android:label attribute in application tag',
+    );
+
     androidLabel.value = '@string/app_name';
+
+    logger.detail(
+      '[$AndroidManifestProcessor] Replaced android:label attribute value with @string/app_name',
+    );
 
     return document.toXmlString(pretty: true);
   }

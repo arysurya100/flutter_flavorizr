@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,24 +23,29 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_file_string_processor.dart';
-import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 
 class NewFileStringProcessor extends AbstractFileStringProcessor {
   NewFileStringProcessor(
-    String path,
-    StringProcessor processor, {
-    required Flavorizr config,
-  }) : super(
-          path,
-          processor,
-          config: config,
-        );
+    super.path,
+    super.processor, {
+    required super.config,
+    required super.logger,
+  });
 
   @override
   void execute() {
+    logger.detail(
+      '[$NewFileStringProcessor] Creating file `$path`',
+    );
+
     file.createSync(recursive: true);
+
+    logger.detail(
+      '[$NewFileStringProcessor] File `$path` created',
+      style: logger.theme.success,
+    );
+
     super.execute();
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/new_file_string_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/new_folder_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
@@ -32,16 +31,21 @@ import 'package:flutter_flavorizr/src/utils/constants.dart';
 
 class VSCodeLaunchFileProcessor extends QueueProcessor {
   VSCodeLaunchFileProcessor({
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           [
-            NewFolderProcessor(K.vsCodePath, config: config),
+            NewFolderProcessor(
+              K.vsCodePath,
+              config: config,
+              logger: logger,
+            ),
             NewFileStringProcessor(
               K.vsCodeLaunchPath,
-              VSCodeLaunchProcessor(config: config),
+              VSCodeLaunchProcessor(config: config, logger: logger),
               config: config,
+              logger: logger,
             )
           ],
-          config: config,
         );
 }

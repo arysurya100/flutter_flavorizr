@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,11 +24,13 @@
  */
 
 import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 abstract class AbstractProcessor<T> {
   final Flavorizr config;
+  final Logger logger;
 
-  AbstractProcessor(this.config);
+  const AbstractProcessor(this.config, {required this.logger});
 
   T execute();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,9 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/android/google/firebase/android_firebase_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
+import 'package:flutter_flavorizr/src/processors/darwin/xcodeproj_processor.dart';
 import 'package:flutter_flavorizr/src/processors/ios/google/firebase/ios_targets_firebase_processor.dart';
 import 'package:flutter_flavorizr/src/processors/macos/google/firebase/macos_targets_firebase_processor.dart';
 
@@ -41,14 +41,19 @@ class FirebaseProcessor extends QueueProcessor {
     required String firebaseScript,
     required String iosGeneratedFirebaseScriptPath,
     required String macosGeneratedFirebaseScriptPath,
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           [
             if (config.androidFirebaseFlavorsAvailable)
               AndroidFirebaseProcessor(
                 destination: androidDestination,
                 config: config,
+                logger: logger,
               ),
+            if (config.iosFirebaseFlavorsAvailable ||
+                config.macosFirebaseFlavorsAvailable)
+              XcodeprojProcessor(config: config, logger: logger),
             if (config.iosFirebaseFlavorsAvailable)
               IOSTargetsFirebaseProcessor(
                 process: process,
@@ -58,19 +63,20 @@ class FirebaseProcessor extends QueueProcessor {
                 firebaseScript: firebaseScript,
                 generatedFirebaseScriptPath: iosGeneratedFirebaseScriptPath,
                 config: config,
+                logger: logger,
               ),
             if (config.macosFirebaseFlavorsAvailable)
               MacOSTargetsFirebaseProcessor(
                 process: process,
-                destination: iosDestination,
+                destination: macosDestination,
                 addFileScript: addFileScript,
                 runnerProject: macosRunnerProject,
                 firebaseScript: firebaseScript,
                 generatedFirebaseScriptPath: macosGeneratedFirebaseScriptPath,
                 config: config,
+                logger: logger,
               ),
           ],
-          config: config,
         );
 
   @override

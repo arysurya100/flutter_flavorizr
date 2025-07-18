@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,30 +25,42 @@
 
 import 'dart:io';
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_file_processor.dart';
 
 class DownloadFileProcessor extends AbstractFileProcessor {
   final String _url;
 
   DownloadFileProcessor(
-    String path, {
-    required Flavorizr config,
-  })  : _url = config.assetsUrl,
-        super(
-          path,
-          config: config,
-        );
+    super.path, {
+    required super.config,
+    required super.logger,
+  })  : _url = config.assetsUrl;
 
   @override
   void execute() async {
+    logger.detail(
+      '[$DownloadFileProcessor] Initializing HttpClient',
+    );
     HttpClient client = HttpClient();
 
+    logger.detail(
+      '[$DownloadFileProcessor] Downloading file from $_url',
+    );
     HttpClientRequest request = await client.getUrl(Uri.parse(_url));
     HttpClientResponse response = await request.close();
+
+    logger.detail(
+      '[$DownloadFileProcessor] Downloading file to $path',
+    );
+
     await response.pipe(file.openWrite());
+
+    logger.detail(
+      '[$DownloadFileProcessor] File downloaded to $path',
+      style: logger.theme.success,
+    );
   }
 
   @override
-  String toString() => 'Downloading resources from $_url into $path';
+  String toString() => 'DownloadFileProcessor: { url: $_url, path: $path }';
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/image_resizer_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 import 'package:flutter_flavorizr/src/utils/constants.dart';
@@ -41,7 +40,8 @@ class AndroidIconProcessor extends QueueProcessor {
   AndroidIconProcessor(
     String source,
     String flavorName, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           _entries
               .map(
@@ -52,11 +52,11 @@ class AndroidIconProcessor extends QueueProcessor {
                     sprintf(K.androidIconPath, [flavorName, folder]),
                     size,
                     config: config,
+                    logger: logger,
                   ),
                 ),
               )
               .values,
-          config: config,
         );
 
   @override

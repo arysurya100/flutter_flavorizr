@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -45,7 +45,7 @@ class Flavor {
   @JsonKey(required: false, disallowNullValue: true)
   final Darwin? macos;
 
-  Flavor({
+  const Flavor({
     required this.app,
     this.android,
     this.ios,

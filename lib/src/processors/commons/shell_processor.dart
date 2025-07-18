@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,28 +27,47 @@ import 'dart:io';
 
 import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_processor.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 class ShellProcessor extends AbstractProcessor<void> {
   final String _path;
-  final String? workingDirectory;
+  final String? _workingDirectory;
   final List<String> _args;
 
-  ShellProcessor(
+  const ShellProcessor(
     this._path,
     this._args, {
-    this.workingDirectory,
+    String? workingDirectory,
     required Flavorizr config,
-  }) : super(config);
+    required Logger logger,
+  })  : _workingDirectory = workingDirectory,
+        super(config, logger: logger);
 
   @override
   void execute() {
-    ProcessResult result = Process.runSync(
+    logger.detail(
+      '[$ShellProcessor] Executing shell script path `$_path`'
+      ' with arguments `${_args.join(', ')}` in working directory `$_workingDirectory`',
+    );
+
+    final result = Process.runSync(
       _path,
       _args,
-      workingDirectory: workingDirectory,
+      workingDirectory: _workingDirectory,
     );
     if (result.exitCode != 0) {
-      print(result.stderr);
+      logger.detail(
+        '[$ShellProcessor] Error executing shell script path `$_path`'
+        ' with arguments `${_args.join(', ')}` in working directory `$_workingDirectory`',
+        style: logger.theme.warn,
+      );
+      logger.warn(result.stderr);
+    } else {
+      logger.detail(
+        '[$ShellProcessor] Shell script path `$_path`'
+        ' with arguments `${_args.join(', ')}` in working directory `$_workingDirectory` executed successfully',
+        style: logger.theme.success,
+      );
     }
   }
 

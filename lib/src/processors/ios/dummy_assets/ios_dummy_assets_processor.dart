@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin.dart';
 import 'package:flutter_flavorizr/src/processors/commons/dummy_assets_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
@@ -34,7 +33,8 @@ class IOSDummyAssetsProcessor extends QueueProcessor {
     String destination,
     String flavorName,
     Darwin os, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           [
             DummyAssetsProcessor(
@@ -42,15 +42,16 @@ class IOSDummyAssetsProcessor extends QueueProcessor {
               '$destination/${flavorName}AppIcon.appiconset',
               os,
               config: config,
+              logger: logger,
             ),
             DummyAssetsProcessor(
               '$source/LaunchImage.imageset',
               '$destination/${flavorName}LaunchImage.imageset',
               os,
               config: config,
+              logger: logger,
             ),
           ],
-          config: config,
         );
 
   @override

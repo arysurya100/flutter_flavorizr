@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,6 +25,7 @@
 
 import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_processor.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 abstract class StringProcessor extends AbstractProcessor<String> {
   String? input;
@@ -32,7 +33,8 @@ abstract class StringProcessor extends AbstractProcessor<String> {
   StringProcessor({
     this.input,
     required Flavorizr config,
-  }) : super(config);
+    required Logger logger,
+  }) : super(config, logger: logger);
 
   @override
   String toString() => 'StringProcessor';

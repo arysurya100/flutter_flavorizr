@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,8 +23,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
+import 'package:flutter_flavorizr/src/processors/darwin/xcodeproj_processor.dart';
 import 'package:flutter_flavorizr/src/processors/ios/xcconfig/ios_xcconfig_file_processor.dart';
 
 class IOSXCConfigTargetsFileProcessor extends QueueProcessor {
@@ -33,25 +33,29 @@ class IOSXCConfigTargetsFileProcessor extends QueueProcessor {
     String script,
     String project,
     String path, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
-          config.iosFlavors
-              .map(
-                (flavorName, flavor) => MapEntry(
-                  flavorName,
-                  IOSXCConfigFileProcessor(
-                    process,
-                    script,
-                    project,
-                    path,
+          [
+            XcodeprojProcessor(config: config, logger: logger),
+            ...config.iosFlavors
+                .map(
+                  (flavorName, flavor) => MapEntry(
                     flavorName,
-                    flavor,
-                    config: config,
+                    IOSXCConfigFileProcessor(
+                      process,
+                      script,
+                      project,
+                      path,
+                      flavorName,
+                      flavor,
+                      config: config,
+                      logger: logger,
+                    ),
                   ),
-                ),
-              )
-              .values,
-          config: config,
+                )
+                .values,
+          ],
         );
 
   @override

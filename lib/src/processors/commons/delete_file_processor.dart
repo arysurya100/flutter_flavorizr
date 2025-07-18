@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,23 +23,30 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/abstract_file_processor.dart';
 
 class DeleteFileProcessor extends AbstractFileProcessor {
-  final String _source;
 
   DeleteFileProcessor(
-    this._source, {
-    required Flavorizr config,
-  }) : super(
-          _source,
-          config: config,
-        );
+    super.path, {
+    required super.config,
+    required super.logger,
+  });
 
   @override
-  void execute() => file.deleteSync(recursive: true);
+  void execute() {
+    logger.detail(
+      '[$DeleteFileProcessor] Deleting file at path `$path`',
+    );
+
+    file.deleteSync(recursive: true);
+
+    logger.detail(
+      '[$DeleteFileProcessor] File at path `$path` deleted',
+      style: logger.theme.success,
+    );
+  }
 
   @override
-  String toString() => 'Deleting file from $_source';
+  String toString() => 'DeleteFileProcessor: { source: $path }';
 }

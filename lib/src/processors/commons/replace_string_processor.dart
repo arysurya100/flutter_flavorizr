@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 
 class ReplaceStringProcessor extends StringProcessor {
@@ -33,19 +32,28 @@ class ReplaceStringProcessor extends StringProcessor {
   ReplaceStringProcessor(
     this._find,
     this._replace, {
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
-    return input!.replaceAll(_find, _replace);
+    logger.detail(
+      '[$ReplaceStringProcessor] Replacing `$_find` with `$_replace`',
+    );
+
+    final output = input!.replaceAll(_find, _replace);
+
+    logger.detail(
+      '[$ReplaceStringProcessor] Replaced `$_find` with `$_replace`',
+      style: logger.theme.success,
+    );
+
+    return output;
   }
 
   @override
   String toString() =>
-      'ReplaceStringProcessor: replacing $_find with $_replace';
+      'ReplaceStringProcessor: {find: $_find, replace: $_replace}';
 }

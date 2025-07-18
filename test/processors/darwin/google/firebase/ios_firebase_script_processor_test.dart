@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -29,17 +29,20 @@ import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/parser.dart';
 import 'package:flutter_flavorizr/src/processors/darwin/google/firebase/darwin_firebase_script_processor.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 import '../../../../test_utils.dart';
 
 void main() {
   late Flavorizr flavorizr;
+  late Logger logger;
 
   test('Test IOSFirebaseScriptProcessor with a single flavor', () {
-    Parser parser = Parser(
+    logger = Logger(level: Level.quiet);
+    Parser parser = const Parser(
       pubspecPath:
-          'test_resources/ios/ios_firebase_script_processor_test/single_flavor_pubspec.yaml',
-      flavorizrPath: '',
+          'test_resources/ios/ios_firebase_script_processor_test/single_flavor_pubspec',
+      flavorizrPath: 'test_resources/non_existent',
     );
     try {
       flavorizr = parser.parse();
@@ -54,6 +57,7 @@ void main() {
     DarwinFirebaseScriptProcessor processor = DarwinFirebaseScriptProcessor(
       flavors: flavorizr.iosFirebaseFlavors,
       config: flavorizr,
+      logger: logger,
     );
     String actual = processor.execute();
 
@@ -64,10 +68,10 @@ void main() {
   });
 
   test('Test IOSFirebaseScriptProcessor with multiple flavors', () {
-    Parser parser = Parser(
+    Parser parser = const Parser(
       pubspecPath:
-          'test_resources/ios/ios_firebase_script_processor_test/multiple_flavors_pubspec.yaml',
-      flavorizrPath: '',
+          'test_resources/ios/ios_firebase_script_processor_test/multiple_flavors_pubspec',
+      flavorizrPath: 'test_resources/non_existent',
     );
     try {
       flavorizr = parser.parse();
@@ -82,6 +86,7 @@ void main() {
     DarwinFirebaseScriptProcessor processor = DarwinFirebaseScriptProcessor(
       flavors: flavorizr.iosFirebaseFlavors,
       config: flavorizr,
+      logger: logger,
     );
     String actual = processor.execute();
 

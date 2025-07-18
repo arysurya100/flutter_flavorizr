@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,25 +23,30 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/flavor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 
 class FlutterFlavorsProcessor extends StringProcessor {
   FlutterFlavorsProcessor({
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
-    StringBuffer buffer = StringBuffer();
+    final buffer = StringBuffer();
+
+    logger
+        .detail('[$FlutterFlavorsProcessor] Generating flavor enum and class');
 
     _appendFlavorEnum(buffer);
     _appendFlavorClass(buffer);
+
+    logger.detail(
+      '[$FlutterFlavorsProcessor] Flavor enum and class generated',
+      style: logger.theme.success,
+    );
 
     return buffer.toString();
   }
@@ -49,7 +54,7 @@ class FlutterFlavorsProcessor extends StringProcessor {
   void _appendFlavorEnum(StringBuffer buffer) {
     buffer.writeln('enum Flavor {');
 
-    for (var flavorName in config.flavors.keys) {
+    for (final flavorName in config.flavors.keys) {
       buffer.writeln('  ${flavorName.toLowerCase()},');
     }
 
@@ -59,10 +64,10 @@ class FlutterFlavorsProcessor extends StringProcessor {
   void _appendFlavorClass(StringBuffer buffer) {
     buffer.writeln();
     buffer.writeln('class F {');
-    buffer.writeln('  static Flavor? appFlavor;');
+    buffer.writeln('  static late final Flavor appFlavor;');
     buffer.writeln();
 
-    buffer.writeln('  static String get name => appFlavor?.name ?? \'\';');
+    buffer.writeln('  static String get name => appFlavor.name;');
     buffer.writeln();
 
     buffer.writeln('  static String get title {');
@@ -70,11 +75,9 @@ class FlutterFlavorsProcessor extends StringProcessor {
 
     config.flavors.forEach((String name, Flavor flavor) {
       buffer.writeln('      case Flavor.${name.toLowerCase()}:');
-      buffer.writeln('        return \'${flavor.app.name}\';');
+      buffer.writeln('        return \'${flavor.app.escapedName}\';');
     });
 
-    buffer.writeln('      default:');
-    buffer.writeln('        return \'title\';');
     buffer.writeln('    }');
     buffer.writeln('  }');
 

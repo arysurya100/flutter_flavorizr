@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/enums.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 import 'package:flutter_flavorizr/src/processors/macos/xcconfig/macos_xcconfig_mode_file_processor.dart';
@@ -32,7 +31,8 @@ class MacOSXCConfigFileProcessor extends QueueProcessor {
   MacOSXCConfigFileProcessor(
     String path,
     String flavorName, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           Target.values.map(
             (target) => MacOSXCConfigModeFileProcessor(
@@ -40,9 +40,9 @@ class MacOSXCConfigFileProcessor extends QueueProcessor {
               flavorName,
               target,
               config: config,
+              logger: logger,
             ),
           ),
-          config: config,
         );
 
   @override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/image_resizer_processor.dart';
 import 'package:flutter_flavorizr/src/processors/darwin/icons/darwin_icon_target_processor.dart';
 import 'package:flutter_flavorizr/src/utils/constants.dart';
@@ -48,15 +47,14 @@ class IOSIconTargetProcessor extends DarwinIconTargetProcessor {
   };
 
   IOSIconTargetProcessor(
-    String source,
+    super.source,
     String flavorName, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
-          source,
           flavorName: flavorName,
           iconSet: _entries,
           appIconPath: K.iOSAppIconPath,
-          config: config,
         );
 
   @override

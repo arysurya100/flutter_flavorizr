@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,7 +26,6 @@
 import 'dart:convert';
 
 import 'package:flutter_flavorizr/src/extensions/extensions_string.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/enums.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/shell_processor.dart';
@@ -39,9 +38,9 @@ class DarwinBuildConfigurationsProcessor extends QueueProcessor {
     String project,
     String file,
     String flavorName,
-    String bundleId,
     Map<String, dynamic> buildConfigurations, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           Target.values.map(
             (target) => ShellProcessor(
@@ -52,14 +51,13 @@ class DarwinBuildConfigurationsProcessor extends QueueProcessor {
                 utils.flatPath(
                     '$file/$flavorName${target.name.capitalize}.xcconfig'),
                 flavorName,
-                bundleId,
                 target.name.capitalize,
                 base64.encode(utf8.encode(jsonEncode(buildConfigurations))),
               ],
               config: config,
+              logger: logger,
             ),
           ),
-          config: config,
         );
 
   @override

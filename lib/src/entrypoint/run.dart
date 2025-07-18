@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -29,28 +29,40 @@ import 'package:args/args.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/parser.dart';
 import 'package:flutter_flavorizr/src/processors/processor.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 /// A common entry point to parse command line arguments and execute the process
 ///
 /// Returns the exit code that should be set when the calling process exits. `0`
 /// implies success.
 void execute(List<String> args) {
-  ArgParser argParser = ArgParser();
-  argParser.addMultiOption('processors',
-      abbr: 'p', allowed: Processor.defaultInstructionSet, splitCommas: true);
-  ArgResults results = argParser.parse(args);
-  List<String> argProcessors = results['processors'];
+  final argParser = ArgParser()
+    ..addFlag('force', abbr: 'f')
+    ..addMultiOption(
+      'processors',
+      abbr: 'p',
+      allowed: Processor.defaultInstructionSet,
+      splitCommas: true,
+    )
+    ..addFlag('verbose', abbr: 'v');
 
-  Parser parser = Parser(
-    pubspecPath: 'pubspec.yaml',
-    flavorizrPath: 'flavorizr.yaml',
+  final results = argParser.parse(args);
+  final force = results['force'] as bool? ?? false;
+  final argProcessors = results['processors'];
+  final level = results['verbose'] == true ? Level.verbose : Level.info;
+
+  final logger = Logger(level: level);
+
+  const parser = Parser(
+    pubspecPath: 'pubspec',
+    flavorizrPath: 'flavorizr',
   );
 
-  Flavorizr? flavorizr;
+  late Flavorizr flavorizr;
   try {
     flavorizr = parser.parse();
-  } catch (e) {
-    stderr.writeln(e);
+  } catch (error) {
+    logger.err(error.toString());
     exit(65);
   }
 
@@ -58,6 +70,10 @@ void execute(List<String> args) {
     flavorizr.instructions = argProcessors;
   }
 
-  Processor processor = Processor(flavorizr);
+  final processor = Processor(
+    flavorizr,
+    force: force,
+    logger: logger,
+  );
   processor.execute();
 }

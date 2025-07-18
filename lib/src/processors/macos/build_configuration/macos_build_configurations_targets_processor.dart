@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,10 +24,10 @@
  */
 
 import 'package:flutter_flavorizr/src/parser/mixins/build_settings_mixin.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/flavor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 import 'package:flutter_flavorizr/src/processors/darwin/build_configuration/darwin_build_configurations_processor.dart';
+import 'package:flutter_flavorizr/src/processors/darwin/xcodeproj_processor.dart';
 
 class MacOSBuildConfigurationsTargetsProcessor extends QueueProcessor {
   MacOSBuildConfigurationsTargetsProcessor(
@@ -35,28 +35,31 @@ class MacOSBuildConfigurationsTargetsProcessor extends QueueProcessor {
     String script,
     String project,
     String file, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
-          config.macosFlavors
-              .map((String flavorName, Flavor flavor) => MapEntry(
-                    flavorName,
-                    DarwinBuildConfigurationsProcessor(
-                      process,
-                      script,
-                      project,
-                      file,
+          [
+            XcodeprojProcessor(config: config, logger: logger),
+            ...config.macosFlavors
+                .map((String flavorName, Flavor flavor) => MapEntry(
                       flavorName,
-                      flavor.macos!.bundleId,
-                      {}
-                        ..addAll(config.app?.macos != null
-                            ? config.app!.macos!.buildSettings
-                            : BuildSettingsMixin.macosDefaultBuildSettings)
-                        ..addAll(flavor.macos?.buildSettings ?? {}),
-                      config: config,
-                    ),
-                  ))
-              .values,
-          config: config,
+                      DarwinBuildConfigurationsProcessor(
+                        process,
+                        script,
+                        project,
+                        file,
+                        flavorName,
+                        {}
+                          ..addAll(config.app?.macos != null
+                              ? config.app!.macos!.buildSettings
+                              : BuildSettingsMixin.macosDefaultBuildSettings)
+                          ..addAll(flavor.macos?.buildSettings ?? {}),
+                        config: config,
+                        logger: logger,
+                      ),
+                    ))
+                .values,
+          ],
         );
 
   @override

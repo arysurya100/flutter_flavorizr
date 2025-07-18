@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,7 +27,6 @@ import 'dart:collection';
 
 import 'package:flutter_flavorizr/src/extensions/extensions_map.dart';
 import 'package:flutter_flavorizr/src/extensions/extensions_string.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/enums.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/variable.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/flavor.dart';
@@ -42,19 +41,25 @@ class MacOSConfigsProcessor extends StringProcessor {
     this._flavorName,
     this._flavor,
     this._target, {
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
-    StringBuffer buffer = StringBuffer();
+    final buffer = StringBuffer();
+
+    logger.detail(
+        '[$MacOSConfigsProcessor] Generating $_flavorName.${_target.name}.xcconfig');
 
     _appendIncludes(buffer);
     _appendBody(buffer);
+
+    logger.detail(
+      '[$MacOSConfigsProcessor] Generated $_flavorName.${_target.name}.xcconfig',
+      style: logger.theme.success,
+    );
 
     return buffer.toString();
   }
@@ -67,7 +72,6 @@ class MacOSConfigsProcessor extends StringProcessor {
 
   void _appendBody(StringBuffer buffer) {
     final Map<String, Variable> variables = LinkedHashMap.from({
-      'FLUTTER_TARGET': Variable(value: 'lib/main_$_flavorName.dart'),
       'ASSET_PREFIX': Variable(value: _flavorName),
       'BUNDLE_NAME': Variable(value: _flavor.app.name),
       'BUNDLE_DISPLAY_NAME': Variable(value: _flavor.app.name),

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,7 +26,6 @@
 import 'dart:collection';
 
 import 'package:flutter_flavorizr/src/extensions/extensions_map.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/enums.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/variable.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/flavor.dart';
@@ -41,30 +40,37 @@ class IOSXCConfigProcessor extends StringProcessor {
     this._flavorName,
     this._flavor,
     this._target, {
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
-    StringBuffer buffer = StringBuffer();
+    final buffer = StringBuffer();
+
+    logger.detail(
+        '[$IOSXCConfigProcessor] Generating xcconfig file for $_flavorName.${_target.name}');
 
     _appendIncludes(buffer);
     _appendBody(buffer);
+
+    logger.detail(
+      '[$IOSXCConfigProcessor] xcconfig file generated for $_flavorName.${_target.name}',
+      style: logger.theme.success,
+    );
 
     return buffer.toString();
   }
 
   void _appendIncludes(StringBuffer buffer) {
+    buffer.writeln(
+        '#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.${_target.darwinTarget}.xcconfig"');
     buffer.writeln('#include "Generated.xcconfig"');
   }
 
   void _appendBody(StringBuffer buffer) {
     final Map<String, Variable> variables = LinkedHashMap.from({
-      // 'FLUTTER_TARGET': Variable(value: 'lib/main_$_flavorName.dart'),
       'ASSET_PREFIX': Variable(value: _flavorName),
       'BUNDLE_NAME': Variable(value: _flavor.app.name),
       'BUNDLE_DISPLAY_NAME': Variable(value: _flavor.app.name),

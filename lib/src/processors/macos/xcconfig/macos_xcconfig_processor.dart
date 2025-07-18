@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,28 +23,38 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
+import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/enums.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 
 class MacOSXCConfigProcessor extends StringProcessor {
-  MacOSXCConfigProcessor({
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+  final Target _target;
+
+  MacOSXCConfigProcessor(
+    this._target, {
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
-    StringBuffer buffer = StringBuffer();
+    final buffer = StringBuffer();
+
+    logger.detail('[$MacOSXCConfigProcessor] Generating xcconfig file');
 
     _appendIncludes(buffer);
+
+    logger.detail(
+      '[$MacOSXCConfigProcessor] Generated xcconfig file',
+      style: logger.theme.success,
+    );
 
     return buffer.toString();
   }
 
   void _appendIncludes(StringBuffer buffer) {
+    buffer.writeln(
+        '#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.${_target.darwinTarget}.xcconfig"');
     buffer.writeln('#include "ephemeral/Flutter-Generated.xcconfig"');
   }
 

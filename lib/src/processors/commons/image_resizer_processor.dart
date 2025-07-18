@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,7 +27,6 @@ import 'dart:io';
 
 import 'package:flutter_flavorizr/src/exception/file_not_found_exception.dart';
 import 'package:flutter_flavorizr/src/exception/malformed_resource_exception.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/copy_file_processor.dart';
 import 'package:image/image.dart';
 
@@ -35,23 +34,38 @@ class ImageResizerProcessor extends CopyFileProcessor {
   final Size size;
 
   ImageResizerProcessor(
-    String source,
-    String destination,
+    super.source,
+    super.destination,
     this.size, {
-    required Flavorizr config,
-  }) : super(
-          source,
-          destination,
-          config: config,
-        );
+    required super.config,
+    required super.logger,
+  });
 
   @override
   File execute() {
+    logger.detail(
+      '[$ImageResizerProcessor] Decoding image from file `$source`',
+    );
+
     final image = decodeImage(File(source).readAsBytesSync());
+
     if (image == null) {
+      logger.detail(
+        '[$ImageResizerProcessor] Image from file `$source` does not exist',
+        style: logger.theme.err,
+      );
+
       throw FileNotFoundException(source);
     }
 
+    logger.detail(
+      '[$ImageResizerProcessor] Image decoded from file `$source`',
+      style: logger.theme.success,
+    );
+
+    logger.detail(
+      '[$ImageResizerProcessor] Resizing image from `$source` with size `$size`',
+    );
     final thumbnail = copyResize(
       image,
       width: size.width,
@@ -61,17 +75,37 @@ class ImageResizerProcessor extends CopyFileProcessor {
     final encodedImage = encodeNamedImage(destination, thumbnail);
 
     if (encodedImage == null) {
+      logger.detail(
+        '[$ImageResizerProcessor] Image from file `$source` is malformed',
+        style: logger.theme.err,
+      );
+
       throw MalformedResourceException(source);
     }
 
-    return File(destination)
+    logger.detail(
+      '[$ImageResizerProcessor] Image resized from `$source` to size `$size`',
+      style: logger.theme.success,
+    );
+
+    logger.detail(
+      '[$ImageResizerProcessor] Writing image to file `$destination`',
+    );
+    final file = File(destination)
       ..createSync(recursive: true)
       ..writeAsBytesSync(encodedImage);
+
+    logger.detail(
+      '[$ImageResizerProcessor] Image written to file `$destination`',
+      style: logger.theme.success,
+    );
+
+    return file;
   }
 
   @override
   String toString() =>
-      'ImageResizerProcessor: Resizing image to $size from $source to $destination';
+      'ImageResizerProcessor {source: $source, destination: $destination, size: $size}';
 }
 
 class Size {

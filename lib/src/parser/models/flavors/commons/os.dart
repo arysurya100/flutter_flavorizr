@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -36,7 +36,7 @@ class OS {
   @JsonKey(disallowNullValue: true)
   final String? icon;
 
-  OS({
+  const OS({
     this.generateDummyAssets = true,
     this.firebase,
     this.icon,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -32,7 +32,7 @@ class Firebase {
   @JsonKey(required: true, disallowNullValue: true)
   final String config;
 
-  Firebase({required this.config});
+  const Firebase({required this.config});
 
   factory Firebase.fromJson(Map<String, dynamic> json) =>
       _$FirebaseFromJson(json);

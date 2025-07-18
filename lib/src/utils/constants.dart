@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -37,13 +37,25 @@ class K {
   static String androidAdaptiveIconForegroundPath =
       '$androidAppPath/src/%s/res/%s/ic_launcher_foreground.png';
 
+  static String androidAdaptiveIconMonochromePath =
+      '$androidAppPath/src/%s/res/%s/ic_launcher_monochrome.png';
+
   static String androidAdaptiveIconXmlPath =
       '$androidAppPath/src/%s/res/mipmap-anydpi-v26/ic_launcher.xml';
 
   static String androidManifestPath =
       '$androidSrcPath/main/AndroidManifest.xml';
 
-  static String androidBuildGradlePath = '$androidAppPath/build.gradle';
+  static String androidBuildKotlinPath = '$androidAppPath/build.gradle.kts';
+  static String androidBuildLegacyPath = '$androidAppPath/build.gradle';
+
+  static String androidFlavorizrLegacyName = 'flavorizr.gradle';
+  static String androidFlavorizrKotlinName = 'flavorizr.gradle.kts';
+
+  static String androidFlavorizrLegacyPath =
+      '$androidAppPath/$androidFlavorizrLegacyName';
+  static String androidFlavorizrKotlinPath =
+      '$androidAppPath/$androidFlavorizrKotlinName';
 
   static String flutterPath = 'lib';
 
@@ -65,6 +77,8 @@ class K {
 
   static String iOSRunnerProjectPath = '$iOSPath/Runner.xcodeproj';
 
+  static String iOSPodfilePath = '$iOSPath/Podfile';
+
   static String iOSPListPath = '$iOSRunnerPath/Info.plist';
 
   static String iOSAssetsPath = '$iOSRunnerPath/Assets.xcassets';
@@ -78,6 +92,8 @@ class K {
   static String macOSRunnerPath = '$macOSPath/Runner';
 
   static String macOSRunnerProjectPath = '$macOSPath/Runner.xcodeproj';
+
+  static String macOSPodfilePath = '$macOSPath/Podfile';
 
   static String macOSPlistPath = '$macOSRunnerPath/Info.plist';
 
@@ -104,8 +120,6 @@ class K {
   static String tempFlutterAppPath = '$tempFlutterPath/app.dart';
 
   static String tempFlutterMainPath = '$tempFlutterPath/main.dart';
-
-  static String tempFlutterMainTargetPath = '$tempFlutterPath/main_target.dart';
 
   static String tempFlutterPagesPath = '$tempFlutterPath/pages';
 
@@ -147,4 +161,6 @@ class K {
   static String vsCodePath = '.vscode';
 
   static String vsCodeLaunchPath = '$vsCodePath/launch.json';
+
+  const K._();
 }

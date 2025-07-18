@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,28 +27,36 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter_flavorizr/src/exception/malformed_resource_exception.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 import 'package:xml/xml.dart';
 
 class MacOSPListProcessor extends StringProcessor {
   MacOSPListProcessor({
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
+    logger.detail(
+      '[$MacOSPListProcessor] Updating macOS PList file',
+    );
+
     XmlDocument document = XmlDocument.parse(input!);
     XmlElement root =
         (document.rootElement.children.whereType<XmlElement>().first);
 
     _updateCFBundleName(root);
 
-    return document.toXmlString(pretty: true);
+    final result = document.toXmlString(pretty: true);
+
+    logger.detail(
+      '[$MacOSPListProcessor] Updated macOS PList file',
+      style: logger.theme.success,
+    );
+
+    return result;
   }
 
   void _updateCFBundleName(XmlElement root) => _updatePListValueAtKey(

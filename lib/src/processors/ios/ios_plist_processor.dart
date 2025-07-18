@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,21 +27,20 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter_flavorizr/src/exception/malformed_resource_exception.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 import 'package:xml/xml.dart';
 
 class IOSPListProcessor extends StringProcessor {
   IOSPListProcessor({
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String execute() {
+    logger.detail('[$IOSPListProcessor] Updating iOS PList file');
+
     XmlDocument document = XmlDocument.parse(input!);
     XmlElement root =
         (document.rootElement.children.whereType<XmlElement>().first);
@@ -53,7 +52,14 @@ class IOSPListProcessor extends StringProcessor {
       _updateUILaunchStoryboardName(root);
     }
 
-    return document.toXmlString(pretty: true);
+    final result = document.toXmlString(pretty: true);
+
+    logger.detail(
+      '[$IOSPListProcessor] iOS PList file updated',
+      style: logger.theme.success,
+    );
+
+    return result;
   }
 
   void _updateCFBundleName(XmlElement root) => _updatePListValueAtKey(

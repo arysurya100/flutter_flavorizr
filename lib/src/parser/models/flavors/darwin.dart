@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -43,14 +43,10 @@ class Darwin extends OS with BuildSettingsMixin {
     required this.bundleId,
     this.variables = const {},
     Map<String, dynamic> buildSettings = const {},
-    bool generateDummyAssets = true,
-    Firebase? firebase,
-    String? icon,
-  }) : super(
-          generateDummyAssets: generateDummyAssets,
-          firebase: firebase,
-          icon: icon,
-        ) {
+    super.generateDummyAssets,
+    super.firebase,
+    super.icon,
+  }) {
     this.buildSettings = {
       "PRODUCT_BUNDLE_IDENTIFIER": bundleId,
     };

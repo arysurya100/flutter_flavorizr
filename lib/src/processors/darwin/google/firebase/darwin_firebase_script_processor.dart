@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,22 +23,18 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/flavor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 
 class DarwinFirebaseScriptProcessor extends StringProcessor {
-
   final Map<String, Flavor> flavors;
 
   DarwinFirebaseScriptProcessor({
-    String? input,
+    super.input,
     required this.flavors,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String toString() => 'DarwinFirebaseScriptProcessor';
@@ -48,6 +44,9 @@ class DarwinFirebaseScriptProcessor extends StringProcessor {
     StringBuffer buffer = StringBuffer();
 
     if (flavors.isNotEmpty) {
+      logger.detail(
+          '[$DarwinFirebaseScriptProcessor] Generating Firebase script');
+
       final iterator = flavors.keys.iterator;
       iterator.moveNext();
 
@@ -61,6 +60,11 @@ class DarwinFirebaseScriptProcessor extends StringProcessor {
 
       buffer.writeln('fi');
       buffer.writeln();
+
+      logger.detail(
+        '[$DarwinFirebaseScriptProcessor] Firebase script generated',
+        style: logger.theme.success,
+      );
     }
 
     return buffer.toString();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -44,8 +44,9 @@ class Flavorizr {
   List<String>? instructions;
 
   @JsonKey(
-      defaultValue:
-          'https://github.com/AngeloAvv/flutter_flavorizr/releases/download/v2.2.1/assets.zip')
+    defaultValue:
+        'https://github.com/AngeloAvv/flutter_flavorizr/releases/download/v2.4.1/assets.zip',
+  )
   final String assetsUrl;
 
   @JsonKey()
@@ -81,18 +82,20 @@ class Flavorizr {
   })  : androidFlavors = flavors.where((_, flavor) => flavor.android != null),
         iosFlavors = flavors.where((_, flavor) => flavor.ios != null),
         macosFlavors = flavors.where((_, flavor) => flavor.macos != null),
-        androidFirebaseFlavors =
-            flavors.where((_, flavor) => flavor.android?.firebase != null),
-        androidAGConnectFlavors =
-            flavors.where((_, flavor) => flavor.android?.agconnect != null),
-        iosFirebaseFlavors =
-            flavors.where((_, flavor) => flavor.ios?.firebase != null),
-        macosFirebaseFlavors =
-            flavors.where((_, flavor) => flavor.macos?.firebase != null);
+        androidFirebaseFlavors = flavors.where(
+          (_, flavor) => flavor.android?.firebase != null,
+        ),
+        androidAGConnectFlavors = flavors.where(
+          (_, flavor) => flavor.android?.agconnect != null,
+        ),
+        iosFirebaseFlavors = flavors.where(
+          (_, flavor) => flavor.ios?.firebase != null,
+        ),
+        macosFirebaseFlavors = flavors.where(
+          (_, flavor) => flavor.macos?.firebase != null,
+        );
 
-
-  factory Flavorizr.fromJson(Map json) =>
-      _$FlavorizrFromJson(json);
+  factory Flavorizr.fromJson(Map json) => _$FlavorizrFromJson(json);
 
   factory Flavorizr.parse(String yaml) =>
       checkedYamlDecode(yaml, (o) => Flavorizr.fromJson(o ?? {}));

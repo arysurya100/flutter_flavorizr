@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -29,14 +29,21 @@ import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/parser.dart';
 import 'package:flutter_flavorizr/src/processors/android/android_manifest_processor.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 import '../../test_utils.dart';
 
 void main() {
   late Flavorizr flavorizr;
+  late Logger logger;
 
   setUp(() {
-    Parser parser = Parser(pubspecPath: 'test_resources/pubspec.yaml', flavorizrPath: '',);
+    logger = Logger(level: Level.quiet);
+    Parser parser = const Parser(
+      pubspecPath: 'test_resources/pubspec',
+      flavorizrPath: 'test_resources/non_existent',
+    );
+
     try {
       flavorizr = parser.parse();
     } catch (e) {
@@ -54,8 +61,11 @@ void main() {
             'test_resources/android/android_manifest_processor_test/AndroidManifest_expected.xml')
         .readAsStringSync();
 
-    AndroidManifestProcessor processor =
-        AndroidManifestProcessor(input: content, config: flavorizr);
+    AndroidManifestProcessor processor = AndroidManifestProcessor(
+      input: content,
+      config: flavorizr,
+      logger: logger,
+    );
     String actual = processor.execute();
 
     actual = TestUtils.stripEndOfLines(actual);
@@ -68,6 +78,7 @@ void main() {
     AndroidManifestProcessor processor = AndroidManifestProcessor(
       input: '',
       config: flavorizr,
+      logger: logger,
     );
     expect(() => processor.execute(), throwsException);
   });

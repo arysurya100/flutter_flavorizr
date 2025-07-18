@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,7 +24,6 @@
  */
 
 import 'package:flutter_flavorizr/src/extensions/extensions_string.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/darwin/enums.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 import 'package:flutter_flavorizr/src/processors/ide/vscode/models/configuration.dart';
@@ -32,8 +31,9 @@ import 'package:flutter_flavorizr/src/processors/ide/vscode/models/launch.dart';
 
 class VSCodeLaunchProcessor extends StringProcessor {
   VSCodeLaunchProcessor({
-    required Flavorizr config,
-  }) : super(config: config);
+    required super.config,
+    required super.logger,
+  });
 
   @override
   execute() => Launch(
@@ -50,7 +50,7 @@ class VSCodeLaunchProcessor extends StringProcessor {
                     '--flavor',
                     flavorName,
                   ],
-                  program: 'lib/main_$flavorName.dart',
+                  program: 'lib/main.dart',
                 ),
               ),
             )

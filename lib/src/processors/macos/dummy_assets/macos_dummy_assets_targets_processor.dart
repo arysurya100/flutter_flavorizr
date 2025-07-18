@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 import 'package:flutter_flavorizr/src/processors/macos/dummy_assets/macos_dummy_assets_processor.dart';
 
@@ -31,7 +30,8 @@ class MacOSDummyAssetsTargetsProcessor extends QueueProcessor {
   MacOSDummyAssetsTargetsProcessor(
     String source,
     String destination, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           config.macosFlavors
               .map(
@@ -43,11 +43,11 @@ class MacOSDummyAssetsTargetsProcessor extends QueueProcessor {
                     flavorName,
                     flavor.macos!,
                     config: config,
+                    logger: logger,
                   ),
                 ),
               )
               .values,
-          config: config,
         );
 
   @override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/parser/models/flavors/commons/os.dart';
 import 'package:flutter_flavorizr/src/processors/commons/copy_folder_processor.dart';
 
@@ -31,24 +30,35 @@ class DummyAssetsProcessor extends CopyFolderProcessor {
   final OS _os;
 
   DummyAssetsProcessor(
-    String source,
-    String destination,
+    super.source,
+    super.destination,
     this._os, {
-    required Flavorizr config,
-  }) : super(
-          source,
-          destination,
-          config: config,
-        );
+    required super.config,
+    required super.logger,
+  });
 
   @override
   void execute() {
     if (_os.generateDummyAssets) {
+      logger.detail(
+        '[$DummyAssetsProcessor] Generating dummy assets into `$destination`',
+      );
+
       super.execute();
+
+      logger.detail(
+        '[$DummyAssetsProcessor] Dummy assets generated into `$destination`',
+        style: logger.theme.success,
+      );
     }
+
+    logger.detail(
+      '[$DummyAssetsProcessor] Skipping dummy assets generation',
+      style: logger.theme.warn,
+    );
   }
 
   @override
   String toString() =>
-      'DummyAssetProcessor: ${!_os.generateDummyAssets ? 'Skipping dummy assets' : super.toString()}';
+      'DummyAssetProcessor: { source: $source, destination: $destination }';
 }

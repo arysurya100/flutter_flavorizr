@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,23 +23,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 import 'package:flutter_flavorizr/src/processors/ide/idea/idea_launch_file_processor.dart';
 
 class IdeaRunConfigurationsProcessor extends QueueProcessor {
   IdeaRunConfigurationsProcessor(
     String path, {
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           config.flavors.keys.map(
             (flavorName) => IdeaLaunchFileProcessor(
               flavorName,
-              '$path/main_${flavorName}_dart.xml',
+              '$path/$flavorName.xml',
               config: config,
+              logger: logger,
             ),
           ),
-          config: config,
         );
 
   @override

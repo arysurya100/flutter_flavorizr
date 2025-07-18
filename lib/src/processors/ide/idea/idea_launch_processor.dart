@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,7 +23,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/commons/string_processor.dart';
 import 'package:xml/xml.dart';
 
@@ -32,12 +31,10 @@ class IdeaLaunchProcessor extends StringProcessor {
 
   IdeaLaunchProcessor(
     this._flavorName, {
-    String? input,
-    required Flavorizr config,
-  }) : super(
-          input: input,
-          config: config,
-        );
+    super.input,
+    required super.config,
+    required super.logger,
+  });
 
   @override
   String toString() => 'IdeaLaunchProcessor';
@@ -46,11 +43,14 @@ class IdeaLaunchProcessor extends StringProcessor {
   String execute() {
     final builder = XmlBuilder();
 
+    logger.detail(
+        '[$IdeaLaunchProcessor] Generating launch configuration for $_flavorName');
+
     builder.element('component',
         attributes: {'name': 'ProjectRunConfigurationManager'}, nest: () {
       builder.element('configuration', attributes: {
         'default': 'false',
-        'name': 'main_$_flavorName.dart',
+        'name': _flavorName,
         'type': 'FlutterRunConfigurationType',
         'factoryName': 'Flutter',
       }, nest: () {
@@ -61,7 +61,7 @@ class IdeaLaunchProcessor extends StringProcessor {
 
         builder.element('option', attributes: {
           'name': 'filePath',
-          'value': '\$PROJECT_DIR\$/lib/main_$_flavorName.dart',
+          'value': '\$PROJECT_DIR\$/lib/main.dart',
         });
 
         builder.element('method', attributes: {
@@ -70,6 +70,13 @@ class IdeaLaunchProcessor extends StringProcessor {
       });
     });
 
-    return builder.buildDocument().toXmlString(pretty: true);
+    final result = builder.buildDocument().toXmlString(pretty: true);
+
+    logger.detail(
+      '[$IdeaLaunchProcessor] Launch configuration generated',
+      style: logger.theme.success,
+    );
+
+    return result;
   }
 }

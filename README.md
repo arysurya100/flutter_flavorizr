@@ -12,39 +12,30 @@ If you want to support this project, please leave a star, share this project, or
 
 ## Getting Started
 
-Let's start by setting up our environment in order to run Flutter
-Flavorizr
+Let's start by setting up our environment in order to run Flutter Flavorizr
 
 ### Prerequisites
 
 Side note: this tool works better on a new and clean Flutter project.
-Since some processors reference some existing files and a specific base
-structure, it could be possible that running Flutter Flavorizr over an
-existing project could throw errors.
+Since some processors reference some existing files and a specific base structure, it could be possible that running Flutter Flavorizr over an existing project could throw errors.
 
-Before running Flutter Flavorizr, you must install the following
-software:
+Before running Flutter Flavorizr, you must install the following software:
 
 * [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
 * [Gem](https://rubygems.org/pages/download)
 * [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) (through RubyGems)
 
-These prerequisites are needed to manipulate the iOS and macOS projects and
-schemes. If you are interested in flavorizing Android only, you can skip
-this step. Keep in mind that you will have to use a custom instructions
-set with Android and Flutter processors only, otherwise an error will
-occur.
+These prerequisites are needed to manipulate the iOS and macOS projects and schemes. If you are interested in flavorizing Android only, you can skip this step.
+
+If your app uses a Flutter plugin and you plan to create flavors for iOS and macOS, you need to make sure there's an existing Podfile file under the ios/macos folder. This might lead to problems like ["Unable to load contents of file list"](doc%2Ftroubleshooting%2Funable-to-load-contents-of-file-list%2FREADME.md).
 
 ### Installation
 
-This package is intended to support development of Flutter projects. In
-general, put it under
-[dev_dependencies](https://dart.dev/tools/pub/dependencies#dev-dependencies),
-in your [pubspec.yaml](https://dart.dev/tools/pub/pubspec):
+This package is intended to support development of Flutter projects. In general, put it under [dev_dependencies](https://dart.dev/tools/pub/dependencies#dev-dependencies), in your [pubspec.yaml](https://dart.dev/tools/pub/pubspec):
 
 ```yaml
 dev_dependencies:
-  flutter_flavorizr: ^2.2.1
+  flutter_flavorizr: ^2.4.1
 ```
 
 You can install packages from the command line:
@@ -55,16 +46,11 @@ pub get
 
 ## Create your flavors
 
-Once all of the prerequisites have been installed and you have added
-flutter_flavorizr as a dev dependency, you have to edit your
-[pubspec.yaml](https://dart.dev/tools/pub/pubspec) and define the
-flavors.
+Once all of the prerequisites have been installed and you have added flutter_flavorizr as a dev dependency, you have to edit your [pubspec.yaml](https://dart.dev/tools/pub/pubspec) and define the flavors.
 
 ### Example
 
-Create a new file named flavorizr.yaml and define the name of the
-flavors, in our example *apple* and *banana*. For each flavor you have
-to specify the *app name*, the *applicationId* and the *bundleId*.
+Create a new file named flavorizr.yaml and define the name of the flavors, in our example *apple* and *banana*. For each flavor you have to specify the *app name*, the *applicationId* and the *bundleId*.
 
 ```yaml
 flavors:
@@ -91,9 +77,7 @@ flavors:
 ```
 
 Alternatively, add a new key named flavorizr and define a sub item named *flavors*. 
-Under the flavors array you can define the name of the
-flavors, in our example *apple* and *banana*. For each flavor you have
-to specify the *app name*, the *applicationId* and the *bundleId*.
+Under the flavors array you can define the name of the flavors, in our example *apple* and *banana*. For each flavor you have to specify the *app name*, the *applicationId* and the *bundleId*.
 This way of defining flavors will be deprecated in versions 3.x
 
 ```yaml
@@ -130,7 +114,7 @@ flavorizr:
 | app                                     | Object |                                                                                     | false    | An object describing the general capabilities of an app                                       |
 | flavors                                 | Array  |                                                                                     | true     | An array of items. Each of them describes a flavor configuration                              |
 | [instructions](#available-instructions) | Array  |                                                                                     | false    | An array of instructions to customize the flavorizr process                                   |
-| assetsUrl                               | String | [link](https://github.com/AngeloAvv/flutter_flavorizr/releases/download/v2.2.1/assets.zip) | false    | A string containing the URL of the zip assets file. The default points to the current release |
+| assetsUrl                               | String | [link](https://github.com/AngeloAvv/flutter_flavorizr/releases/download/v2.4.1/assets.zip) | false    | A string containing the URL of the zip assets file. The default points to the current release |
 | ide                                     | String |                                                                                     | false    | The IDE in which the app is being developed. Currently only `vscode` or `idea`                |
 
 ##### <a href="#available-instructions">Available instructions</a>
@@ -140,7 +124,8 @@ flavorizr:
 | assets:download         | Miscellaneous | Downloads the assets zip from the network                               |
 | assets:extract          | Miscellaneous | Extracts the downloaded zip in the project .tmp directory               |
 | assets:clean            | Miscellaneous | Removes the assets from the project directory                           |
-| android:buildGradle     | Android       | Adds the flavors to the Android build.gradle file                       |
+| android:flavorizrGradle | Android       | Adds the flavors to the Android flavorizr.gradle file                   |
+| android:buildGradle     | Android       | Imports the Android flavorizr.gradle file into build.gradle file        |
 | android:androidManifest | Android       | Changes the reference of the app name in the AndroidManifest.xml        |
 | android:dummyAssets     | Android       | Generates some default icons for your custom flavors                    |
 | android:icons           | Android       | Creates a set of icons for each flavor according to the icon directive  |
@@ -148,10 +133,10 @@ flavorizr:
 | flutter:app             | Flutter       | Creates the app.dart entry                                              |
 | flutter:pages           | Flutter       | Creates a set of default pages for the app                              |
 | flutter:main            | Flutter       | Creates the main target to run the app                                  |
-| flutter:targets         | Flutter       | Creates a set of targets for each flavor instance                       |
 | google:firebase         | Google        | Adds Google Firebase configurations for Android and iOS for each flavor |
 | huawei:agconnect        | Huawei        | Adds Huawei AGConnect configurations for Android for each flavor        |
 | ide:config              | IDE           | Generates debugging configurations for each flavor of your IDE          |
+| ios:podfile             | iOS           | Updates the Pods-Runner path for each flavor                            |
 | ios:xcconfig            | iOS           | Creates a set of xcconfig files for each flavor and build configuration |
 | ios:buildTargets        | iOS           | Creates a set of build targets for each flavor and build configuration  |
 | ios:schema              | iOS           | Creates a set of schemas for each flavor                                |
@@ -159,6 +144,7 @@ flavorizr:
 | ios:icons               | iOS           | Creates a set of icons for each flavor according to the icon directive  |
 | ios:plist               | iOS           | Updates the info.plist file                                             |
 | ios:launchScreen        | iOS           | Creates a set of launchscreens for each flavor                          |
+| macos:podfile           | macOS         | Updates the Pods-Runner path for each flavor                            |
 | macos:xcconfig          | macOS         | Creates a set of xcconfig files for each flavor and build configuration |
 | macos:configs           | macOS         | Creates a set of xcconfig files for each flavor and build configuration |
 | macos:buildTargets      | macOS         | Creates a set of build targets for each flavor and build configuration  |
@@ -205,7 +191,7 @@ flavorizr:
 | customConfig        | Array  |         | false    | An array which contains a set of custom configs, *overrides defaultConfig* |
 | generateDummyAssets | bool   | true    | false    | True if you want to generate dummy assets (icon set, strings, etc)         |
 | icon                | String |         | false    | The icon path for this android flavor                                      |
-| adaptiveIcon        | Array  |         | false    | An array which contains foreground and background of adaptive icon         |
+| adaptiveIcon        | Array  |         | false    | An array which contains foreground, background, monochrome (optional) of adaptive icon   |
 
 #### ios (under *flavorname*)
 
@@ -370,8 +356,11 @@ flavors:
       adaptiveIcon:
         foreground: "assets/adaptive_icon/appleApp/ic_launcher_foreground.png"
         background: "assets/adaptive_icon/appleApp/ic_launcher_background.png"
+        monochrome: "assets/adaptive_icon/appleApp/ic_launcher_monochrome.png"
 ```
-After removing adaptiveIcon key, the adaptive icons generated before will still exist. Please delete adaptiveIcon manually.
+
+* monochrome (Themed icons on Android >= 13) is optional.
+* After removing adaptiveIcon key, the adaptive icons generated before will still exist. Please delete adaptiveIcon manually.
 
 
 ## Usage
@@ -395,23 +384,61 @@ flutter pub run flutter_flavorizr -p assets:download
 flutter pub run flutter_flavorizr -p assets:download,assets:extract
 ```
 
+Keep in mind that the order of the processors is important. For example, if you want to run the assets:extract processor, you must run it after the assets:download processor.
+Also, some processors need assets to be downloaded before running. For example, the android:dummyAssets processor needs the assets:download processor to be run before.
+As a rule of thumb, you should always run both assets:download and assets:extract before running any other processor.
+
+If you want to run flutter_flavorizr in verbose mode, you can append the -v (or --verbose) param:
+
+```terminal
+flutter pub run flutter_flavorizr -v
+```
+
+This will print all the logs to the console, including the ones from the processors.
+
+If you want to skip the confirmation step, you can append the -f (or --force) param:
+
+```terminal
+flutter pub run flutter_flavorizr -f
+```
+
 ## Run your flavors
 
 Once the process has generated the flavors, you can run them by typing
 
 ```terminal
-flutter run --flavor <flavorName> -t lib/main_<flavorName>.dart
+flutter run --flavor <flavorName>
 ```
 
 Example
 
 ```terminal
-flutter run --flavor apple -t lib/main_apple.dart
-flutter run --flavor banana -t lib/main_banana.dart
+flutter run --flavor apple
+flutter run --flavor banana
 ```
 
 Currently, due to a bug in the Flutter SDK, it's not possible to run the macOS flavors from the terminal.
 You can run them from XCode by selecting the proper schema and by pressing play.
+
+As a temporary workaround, you can apply the following configuration to your flavorizr config:
+
+```yaml
+flavors:
+  apple:
+    app:
+      name: "Apple App"
+
+    android:
+      applicationId: "com.example.apple"
+    ios:
+      bundleId: "com.example.apple"
+    macos:
+      bundleId: "com.example.apple"
+      buildSettings:
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/../Frameworks"
+```            
 
 ### Default processors set
 
@@ -420,6 +447,7 @@ By default, when you do not specify a custom set of processors by appending the 
 * assets:download
 * assets:extract
 * android:androidManifest
+* android:flavorizrGradle
 * android:buildGradle
 * android:dummyAssets
 * android:icons
@@ -427,7 +455,7 @@ By default, when you do not specify a custom set of processors by appending the 
 * flutter:app
 * flutter:pages
 * flutter:main
-* flutter:targets
+* ios:podfile
 * ios:xcconfig
 * ios:buildTargets
 * ios:schema
@@ -435,6 +463,7 @@ By default, when you do not specify a custom set of processors by appending the 
 * ios:icons
 * ios:plist
 * ios:launchScreen
+* macos:podfile
 * macos:xcconfig
 * macos:configs
 * macos:buildTargets
@@ -449,44 +478,29 @@ By default, when you do not specify a custom set of processors by appending the 
 
 ## Customize your app
 
-Flutter_flavorizr creates different dart files in the lib folder. In the
-flavors.dart file we have the F class which contains all of our
-customizations.
+Flutter_flavorizr creates different dart files in the lib folder. In the flavors.dart file we have the F class which contains all of our customizations.
 
 ```dart
 class F {
-  static Flavor? appFlavor;
+  static late final Flavor appFlavor;
+
+  static String get name => appFlavor.name;
 
   static String get title {
     switch (appFlavor) {
-      case Flavor.APPLE:
+      case Flavor.apple:
         return 'Apple App';
-      case Flavor.BANANA:
+      case Flavor.banana:
         return 'Banana App';
-      default:
-        return 'title';
     }
   }
 
 }
 ```
 
-The process creates a simple title customization: a
-switch which checks the current appFlavor (defined in our app starting
-point) and returns the correct value. Here you can write whatever you
-want, you can create your custom app color palette, differentiate the
-URL action of a button, and so on.
+The process creates a simple title customization: a switch which checks the current appFlavor (defined in our app starting point) and returns the correct value. Here you can write whatever you want, you can create your custom app color palette, differentiate the URL action of a button, and so on.
 
-If you are wondering how to use these
-getters, you can find an example under the pages folder: in the
-my_home_page.dart file, the page shown after the launch of the app, we
-can see a clear reference on the title getter defined in the F class.
-
-## Side notes
-
-I haven't found yet a good groovy parser to guarantee the idempotency of the AndroidBuildGradleProcessor.  
-The only way to keep track of the autogenerated flavorDimensions is to mark up the beginning and the end of the section with magic comments.  
-Please do not erase these comments otherwise you will break down the AndroidBuildGradleProcessor.
+If you are wondering how to use these getters, you can find an example under the pages folder: in the my_home_page.dart file, the page shown after the launch of the app, we can see a clear reference on the title getter defined in the F class.
 
 ## Third party services
 
@@ -526,10 +540,25 @@ flavors:
         config: ".firebase/banana/GoogleService-Info.plist"
 ```
 
+After running flutter_flavorizr, remember to add the native dependencies for the targeted operative system. You can take advantage of [flutterfire_cli](https://firebase.google.com/docs/flutter/setup) to do so. Remember to ignore the generated firebase_options.dart file, as it will conflict with the flavors configuration. Do this instead:
+
+```dart
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Do not pass the options here
+  
+  runApp(const App());
+}
+```
+
 ### Huawei AppGallery Connect
 
-In order to flavorize your project and enable AppGallery Connect in your flavor  
-you have to define an agconnect object below each Android flavor. Under the agconnect object you must define the config path of the agconnect-services.json.
+In order to flavorize your project and enable AppGallery Connect in your flavor you have to define an agconnect object below each Android flavor. Under the agconnect object you must define the config path of the agconnect-services.json.
 
 As you can see in the example below, we added the path accordingly
 
@@ -559,8 +588,10 @@ flavors:
       bundleId: "com.example.banana"
 ```
 
+Remember to add the native dependencies for the targeted operative system for both Firebase and Huawei AppGallery Connect: flutter_flavorizr will only take care of applying the configuration.
+
 ## Troubleshooting
-How to fix the error ["Unable to load contents of file list"](docs%2Ftroubleshooting%2Funable-to-load-contents-of-file-list%2FREADME.md)
+How to fix the error ["Unable to load contents of file list"](doc%2Ftroubleshooting%2Funable-to-load-contents-of-file-list%2FREADME.md)
 
 ## Docs & Tutorials (from the community)
 [Easily build flavors in Flutter (Android and iOS) with flutter_flavorizr](https://angeloavv.medium.com/easily-build-flavors-in-flutter-android-and-ios-with-flutter-flavorizr-d48cbf956e4) - Angelo Cassano
@@ -575,11 +606,8 @@ How to fix the error ["Unable to load contents of file list"](docs%2Ftroubleshoo
 
 Please feel free to submit new issues if you encounter problems while using this library.
 
-If you need help with the use of the library or you just want to request new features, please use
-the [Discussions](https://github.com/AngeloAvv/flutter_flavorizr/discussions) section of the 
-repository. Issues opened as questions will be automatically closed.
+If you need help with the use of the library or you just want to request new features, please use the [Discussions](https://github.com/AngeloAvv/flutter_flavorizr/discussions) section of the repository. Issues opened as questions will be automatically closed.
 
 ## License
 
-Flutter Flavorizr is available under the MIT license. See the LICENSE
-file for more info.
+Flutter Flavorizr is available under the MIT license. See the LICENSE file for more info.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -35,10 +35,12 @@ class App {
   @JsonKey(disallowNullValue: true)
   final String? icon;
 
-  App({
+  const App({
     required this.name,
     this.icon,
   });
+
+  String get escapedName => name.replaceAll('\'', '\\\'');
 
   factory App.fromJson(Map<String, dynamic> json) => _$AppFromJson(json);
 }

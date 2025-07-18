@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Angelo Cassano
+ * Copyright (c) 2024 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,14 +24,14 @@
  */
 
 import 'package:flutter_flavorizr/src/extensions/extensions_map.dart';
-import 'package:flutter_flavorizr/src/parser/models/flavorizr.dart';
 import 'package:flutter_flavorizr/src/processors/android/google/firebase/android_target_firebase_processor.dart';
 import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
 
 class AndroidFirebaseProcessor extends QueueProcessor {
   AndroidFirebaseProcessor({
     required String destination,
-    required Flavorizr config,
+    required super.config,
+    required super.logger,
   }) : super(
           config.androidFlavors
               .where((flavorName, flavor) => flavor.android?.firebase != null)
@@ -43,11 +43,11 @@ class AndroidFirebaseProcessor extends QueueProcessor {
                     destination,
                     flavorName,
                     config: config,
+                    logger: logger,
                   ),
                 ),
               )
               .values,
-          config: config,
         );
 
   @override
