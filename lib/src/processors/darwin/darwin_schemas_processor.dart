@@ -37,7 +37,7 @@ class DarwinSchemasProcessor extends QueueProcessor {
   }) : super(
           [
             XcodeprojProcessor(config: config, logger: logger),
-            ...config.flavors.keys.map(
+            ...config.iosFlavors.keys.map(
               (String flavorName) => ShellProcessor(
                 process,
                 [
