@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Angelo Cassano
+ * Copyright (c) 2026 Angelo Cassano
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,35 +23,33 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter_flavorizr/src/processors/commons/queue_processor.dart';
-import 'package:flutter_flavorizr/src/processors/commons/shell_processor.dart';
-import 'package:flutter_flavorizr/src/processors/darwin/xcodeproj_processor.dart';
+import 'package:flutter_flavorizr/src/models/commons/size.dart';
+import 'package:flutter_flavorizr/src/models/darwin/icon/darwin_idiom.dart';
 
-class DarwinSchemasProcessor extends QueueProcessor {
-  DarwinSchemasProcessor(
-    String process,
-    String script,
-    String path, {
-    required super.config,
-    required super.logger,
-  }) : super(
-          [
-            XcodeprojProcessor(config: config, logger: logger),
-            ...config.flavors.keys.map(
-              (String flavorName) => ShellProcessor(
-                process,
-                [
-                  script,
-                  path,
-                  flavorName,
-                ],
-                config: config,
-                logger: logger,
-              ),
-            ),
-          ],
-        );
+abstract class DarwinIcon {
+  final double size;
+  final DarwinIdiom idiom;
+  final int scale;
+
+  const DarwinIcon(
+      {required this.size, required this.idiom, required this.scale});
+
+  String get fileName;
+
+  Map<String, dynamic> toJson() {
+    final digits = size.truncate() == size ? 0 : 1;
+    final strSize = size.toStringAsFixed(digits);
+
+    return {
+        'size': '${strSize}x$strSize',
+        'idiom': idiom.value,
+        'scale': '${scale}x',
+        'filename': fileName,
+      };
+  }
+
+  Size get imageSize => Size(size * scale, size * scale);
 
   @override
-  String toString() => 'DarwinSchemasProcessor';
+  String toString() => 'DarwinIcon{size: $size, idiom: $idiom, scale: $scale}';
 }
